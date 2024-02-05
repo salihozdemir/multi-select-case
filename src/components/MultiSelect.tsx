@@ -1,4 +1,5 @@
 import * as Popover from "@radix-ui/react-popover";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { CaretSortIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { Character } from "../types";
 import { useState } from "react";
@@ -30,7 +31,7 @@ export const MultiSelect = ({
     <Popover.Root>
       <Popover.Trigger asChild>
         <div className="relative" id="multi-select">
-          <div className="h-9 w-full cursor-pointer rounded-md border px-9 py-1 pl-3">
+          <div className="w-full cursor-pointer rounded-md border px-9 py-1 pl-3">
             <div className="flex flex-wrap items-center gap-2">
               {value.map((id) => {
                 const character = data?.find((c) => c.id === id);
@@ -46,7 +47,7 @@ export const MultiSelect = ({
               />
             </div>
           </div>
-          <div className="absolute right-0 top-0 flex h-9 w-9 items-center justify-center">
+          <div className="absolute right-0 top-0 flex h-full w-9 items-center justify-center">
             <button>
               <CaretSortIcon />
             </button>
@@ -59,17 +60,28 @@ export const MultiSelect = ({
           sideOffset={9}
           style={{ width: "var(--radix-popover-trigger-width)" }}
         >
-          <div className="w-full rounded-md border bg-gray-50">
-            {data?.map((character) => (
-              <MultiSelectOption
-                key={character.id}
-                character={character}
-                selected={value.includes(character.id)}
-                addSelected={addSelected}
-                removeSelected={removeSelected}
-              />
-            ))}
-          </div>
+          <ScrollArea.Root className="ScrollAreaRoot overflow-hidden bg-white">
+            <ScrollArea.Viewport className="h-full w-full rounded-md border bg-gray-50">
+              <div className="h-72">
+                {data?.map((character) => (
+                  <MultiSelectOption
+                    key={character.id}
+                    character={character}
+                    selected={value.includes(character.id)}
+                    addSelected={addSelected}
+                    removeSelected={removeSelected}
+                  />
+                ))}
+              </div>
+            </ScrollArea.Viewport>
+            <ScrollArea.Scrollbar
+              className="flex h-full w-2.5 touch-none select-none border-l border-l-transparent p-[1px] transition-colors"
+              orientation="vertical"
+            >
+              <ScrollArea.Thumb className="relative flex-1 rounded-full bg-gray-200" />
+            </ScrollArea.Scrollbar>
+            <ScrollArea.Corner />
+          </ScrollArea.Root>
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
