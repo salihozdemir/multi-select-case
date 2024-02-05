@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { CaretSortIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { ScrollArea } from "./ScrollArea";
-import { Character } from "../types";
 
 export type Option = {
   label: string;
@@ -97,54 +96,5 @@ const MultiSelectPill = ({ option, removeSelected }: MultiSelectPillProps) => {
         <Cross2Icon className="h-3 w-3" />
       </button>
     </span>
-  );
-};
-
-export type MultiSelectOptionProps = {
-  character: Character;
-  selected: boolean;
-  addSelected: (option: Option) => void;
-  removeSelected: (option: Option) => void;
-};
-
-export const MultiSelectOption = ({
-  character,
-  selected,
-  addSelected,
-  removeSelected,
-}: MultiSelectOptionProps) => {
-  return (
-    <div
-      className="flex items-center gap-2 border-b p-2 last:border-b-0"
-      role="option"
-      onClick={() =>
-        selected
-          ? removeSelected({
-              label: character.name,
-              value: character.id.toString(),
-            })
-          : addSelected({
-              label: character.name,
-              value: character.id.toString(),
-            })
-      }
-    >
-      <input
-        type="checkbox"
-        checked={selected}
-        onChange={(e) => e.stopPropagation()}
-      />
-      <img
-        src={character.image}
-        alt={character.name}
-        className="h-9 w-9 rounded-md"
-      />
-      <div className="flex flex-1 flex-col">
-        <span className="text-sm">{character.name}</span>
-        <span className="text-xs text-gray-500">
-          {character.episode.length} Episodes
-        </span>
-      </div>
-    </div>
   );
 };

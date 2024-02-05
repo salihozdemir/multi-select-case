@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  MultiSelect,
-  MultiSelectOption,
-  Option,
-} from "./components/MultiSelect";
+import { MultiSelect, Option } from "./components/MultiSelect";
+import { MultiSelectOption } from "./components/MultiSelectOption";
 import type { Character, Response } from "./types";
 
 export const Example = () => {
@@ -30,7 +27,10 @@ export const Example = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <div className="w-[650px]">
+      <div className="w-[350px]">
+        <label className="mb-2 block text-sm font-medium text-gray-700">
+          Pick your favorite characters
+        </label>
         <MultiSelect
           value={value}
           onChange={setValue}
