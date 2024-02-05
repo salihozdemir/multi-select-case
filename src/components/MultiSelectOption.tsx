@@ -3,17 +3,25 @@ import { Character } from "../types";
 
 export type MultiSelectOptionProps = {
   character: Character;
-  selected: boolean;
-  addSelected: (option: Option) => void;
-  removeSelected: (option: Option) => void;
+  value: Option[];
+  setValue: React.Dispatch<React.SetStateAction<Option[]>>;
 };
 
 export const MultiSelectOption = ({
   character,
-  selected,
-  addSelected,
-  removeSelected,
+  value,
+  setValue,
 }: MultiSelectOptionProps) => {
+  const selected = value.some((v) => v.value === character.id.toString());
+
+  const removeSelected = (option: Option) => {
+    setValue((prev) => prev.filter((o) => o.value !== option.value));
+  };
+
+  const addSelected = (option: Option) => {
+    setValue((prev) => [...prev, option]);
+  };
+
   const onSelect = () => {
     if (selected) {
       removeSelected({ label: character.name, value: character.id.toString() });

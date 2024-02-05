@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { CaretSortIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { ScrollArea } from "./ScrollArea";
@@ -23,7 +23,10 @@ export const MultiSelect = ({
   onSearchChange,
   children,
 }: MultiSelectProps) => {
+  const searchRef = useRef<HTMLInputElement>(null);
+
   const [value, setValue] = useState(valueFromProps);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     setValue(valueFromProps);
@@ -33,30 +36,35 @@ export const MultiSelect = ({
     onChange(value);
   }, [value, onChange]);
 
+  useEffect(() => {
+    if (searchValue) {
+      if (!open) setOpen(true);
+    }
+  }, [searchValue, open]);
+
   const removeSelected = (option: Option) => {
     setValue((prev) => prev.filter((o) => o.value !== option.value));
   };
 
   return (
-    <Popover.Root>
+    <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
-        <div className="relative" id="multi-select">
+        <div className="relative">
           <div className="w-full cursor-pointer rounded-md border px-9 py-1 pl-3">
             <div className="flex flex-wrap items-center gap-2">
-              {value.map((option) => {
-                return (
-                  <MultiSelectPill
-                    key={option.value}
-                    option={option}
-                    removeSelected={removeSelected}
-                  />
-                );
-              })}
+              {value.map((option) => (
+                <MultiSelectPill
+                  key={option.value}
+                  option={option}
+                  removeSelected={removeSelected}
+                />
+              ))}
               <input
-                className="h-6 flex-1 text-sm"
+                ref={searchRef}
+                className="h-6 flex-1 text-sm outline-none"
                 placeholder="Pick value"
                 value={searchValue}
-                onChange={(e) => onSearchChange?.(e.target.value)}
+                onChange={(e) => onSearchChange(e.target.value)}
               />
             </div>
           </div>
@@ -72,6 +80,10 @@ export const MultiSelect = ({
           align="start"
           sideOffset={9}
           style={{ width: "var(--radix-popover-trigger-width)" }}
+          onOpenAutoFocus={(e) => {
+            e.preventDefault();
+            searchRef.current?.focus();
+          }}
         >
           <ScrollArea>{children}</ScrollArea>
         </Popover.Content>

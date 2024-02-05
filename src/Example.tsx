@@ -17,14 +17,6 @@ export const Example = () => {
     select: (data) => data.results,
   });
 
-  const removeSelected = (option: Option) => {
-    setValue((prev) => prev.filter((o) => o.value !== option.value));
-  };
-
-  const addSelected = (option: Option) => {
-    setValue((prev) => [...prev, option]);
-  };
-
   return (
     <div className="flex items-center justify-center">
       <div className="w-[500px]">
@@ -41,9 +33,8 @@ export const Example = () => {
             <MultiSelectOption
               key={character.id}
               character={character}
-              selected={value.some((v) => v.value === character.id.toString())}
-              removeSelected={removeSelected}
-              addSelected={addSelected}
+              value={value}
+              setValue={setValue}
             />
           ))}
         </MultiSelect>
