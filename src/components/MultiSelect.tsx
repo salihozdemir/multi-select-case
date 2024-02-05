@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
-import { CaretSortIcon, Cross2Icon } from "@radix-ui/react-icons";
+import { CaretSortIcon, Cross2Icon, UpdateIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "./ScrollArea";
 
 export type Option = {
@@ -13,7 +13,8 @@ export type MultiSelectProps = {
   onChange: (option: Option[]) => void;
   searchValue: string;
   onSearchChange: (value: string) => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  loading?: boolean;
 };
 
 export const MultiSelect = ({
@@ -22,6 +23,7 @@ export const MultiSelect = ({
   searchValue,
   onSearchChange,
   children,
+  loading,
 }: MultiSelectProps) => {
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -85,7 +87,17 @@ export const MultiSelect = ({
             searchRef.current?.focus();
           }}
         >
-          <ScrollArea>{children}</ScrollArea>
+          <ScrollArea>
+            {loading ? (
+              <div className="flex h-full items-center justify-center p-2">
+                <UpdateIcon className="h-4 w-4 animate-spin text-gray-500" />
+              </div>
+            ) : children ? (
+              <div className="h-72">{children}</div>
+            ) : (
+              <p className="p-2 text-gray-500">Nothing found</p>
+            )}
+          </ScrollArea>
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>

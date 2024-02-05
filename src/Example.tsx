@@ -8,7 +8,11 @@ export const Example = () => {
   const [value, setValue] = useState<Option[]>([]);
   const [searchValue, setSearchValue] = useState("");
 
-  const { data } = useQuery<Response<Character[]>, Error, Character[]>({
+  const { data, isPending } = useQuery<
+    Response<Character[]>,
+    Error,
+    Character[]
+  >({
     queryKey: ["characters", searchValue],
     queryFn: () =>
       fetch(
@@ -28,6 +32,7 @@ export const Example = () => {
           onChange={setValue}
           searchValue={searchValue}
           onSearchChange={setSearchValue}
+          loading={isPending}
         >
           {data?.map((character) => (
             <MultiSelectOption
