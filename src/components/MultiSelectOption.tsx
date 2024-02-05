@@ -5,12 +5,14 @@ export type MultiSelectOptionProps = {
   character: Character;
   value: Option[];
   setValue: React.Dispatch<React.SetStateAction<Option[]>>;
+  searchValue: string;
 };
 
 export const MultiSelectOption = ({
   character,
   value,
   setValue,
+  searchValue,
 }: MultiSelectOptionProps) => {
   const selected = value.some((v) => v.value === character.id.toString());
 
@@ -30,6 +32,11 @@ export const MultiSelectOption = ({
     }
   };
 
+  const highlight = (text: string) => {
+    const regex = new RegExp(`(${searchValue})`, "gi");
+    return text.replace(regex, "<mark>$1</mark>");
+  };
+
   return (
     <div
       className="flex cursor-pointer items-center gap-2 border-b p-2 transition-colors last:border-b-0 hover:bg-gray-100"
@@ -47,7 +54,10 @@ export const MultiSelectOption = ({
         className="h-9 w-9 rounded-md"
       />
       <div className="flex flex-1 flex-col">
-        <span className="text-sm">{character.name}</span>
+        <span
+          className="text-sm"
+          dangerouslySetInnerHTML={{ __html: highlight(character.name) }}
+        />
         <span className="text-xs text-gray-500">
           {character.episode.length} Episodes
         </span>

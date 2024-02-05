@@ -35,6 +35,7 @@ export const Example = () => {
               character={character}
               value={value}
               setValue={setValue}
+              searchValue={searchValue}
             />
           ))}
         </MultiSelect>
