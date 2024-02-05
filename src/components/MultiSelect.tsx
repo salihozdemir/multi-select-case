@@ -38,12 +38,6 @@ export const MultiSelect = ({
     onChange(value);
   }, [value, onChange]);
 
-  useEffect(() => {
-    if (searchValue) {
-      if (!open) setOpen(true);
-    }
-  }, [searchValue, open]);
-
   const removeSelected = (option: Option) => {
     setValue((prev) => prev.filter((o) => o.value !== option.value));
   };
