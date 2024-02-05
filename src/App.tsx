@@ -1,3 +1,13 @@
+import { MultiSelect } from "./components/MultiSelect";
+
 export default function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <div className="min-h-screen py-4">
+      <div className="flex items-center justify-center">
+        <div className="w-[650px]">
+          <MultiSelect />
+        </div>
+      </div>
+    </div>
+  );
 }
