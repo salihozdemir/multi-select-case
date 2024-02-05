@@ -1,13 +1,14 @@
-import { MultiSelect } from "./components/MultiSelect";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Example } from "./Example";
 
 export default function App() {
+  const queryClient = new QueryClient()
+  
   return (
-    <div className="min-h-screen py-4">
-      <div className="flex items-center justify-center">
-        <div className="w-[650px]">
-          <MultiSelect />
-        </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="min-h-screen py-4">
+        <Example />
       </div>
-    </div>
+    </QueryClientProvider>
   );
 }

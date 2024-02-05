@@ -1,16 +1,49 @@
 import * as Popover from "@radix-ui/react-popover";
 import { CaretSortIcon, Cross2Icon } from "@radix-ui/react-icons";
+import { Character } from "../types";
+import { useState } from "react";
 
-export const MultiSelect = () => {
+type MultiSelectProps = {
+  data?: Character[];
+  value?: number[];
+  onChange?: (value: string[]) => void;
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+};
+
+export const MultiSelect = ({
+  data,
+  searchValue,
+  onSearchChange,
+}: MultiSelectProps) => {
+  const [value, setValue] = useState<number[]>([]);
+
+  const addSelected = (id: number) => {
+    setValue((prev) => [...prev, id]);
+  };
+
+  const removeSelected = (id: number) => {
+    setValue((prev) => prev.filter((value) => value !== id));
+  };
+
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
         <div className="relative" id="multi-select">
           <div className="h-9 w-full cursor-pointer rounded-md border px-9 py-1 pl-3">
             <div className="flex flex-wrap items-center gap-2">
-              <MultiSelectPill />
-              <MultiSelectPill />
-              <input className="h-6 flex-1 text-sm" placeholder="Pick value" />
+              {value.map((id) => {
+                const character = data?.find((c) => c.id === id);
+                return character ? (
+                  <MultiSelectPill key={id} character={character} />
+                ) : null;
+              })}
+              <input
+                className="h-6 flex-1 text-sm"
+                placeholder="Pick value"
+                value={searchValue}
+                onChange={(e) => onSearchChange?.(e.target.value)}
+              />
             </div>
           </div>
           <div className="absolute right-0 top-0 flex h-9 w-9 items-center justify-center">
@@ -27,18 +60,15 @@ export const MultiSelect = () => {
           style={{ width: "var(--radix-popover-trigger-width)" }}
         >
           <div className="w-full rounded-md border bg-gray-50">
-            <div className="flex items-center gap-2 border-b p-2 last:border-b-0">
-              <input type="checkbox" />
-              <img
-                src="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
-                alt="avatar"
-                className="h-9 w-9 rounded-md"
+            {data?.map((character) => (
+              <MultiSelectOption
+                key={character.id}
+                character={character}
+                selected={value.includes(character.id)}
+                addSelected={addSelected}
+                removeSelected={removeSelected}
               />
-              <div className="flex flex-1 flex-col">
-                <span className="text-sm">Rick Sanchez</span>
-                <span className="text-xs text-gray-500">2 Episodes</span>
-              </div>
-            </div>
+            ))}
           </div>
         </Popover.Content>
       </Popover.Portal>
@@ -46,21 +76,54 @@ export const MultiSelect = () => {
   );
 };
 
-const MultiSelectPill = () => {
-  const handleRemove = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault();
-    console.log("Remove");
-  };
-
+const MultiSelectPill = ({ character }: { character: Character }) => {
   return (
     <span className="inline-flex h-6 items-center rounded-md bg-gray-100 pl-2">
-      <span className="text-xs">Morty Smith</span>
-      <button
-        className="flex h-full items-center pl-0.5 pr-1"
-        onClick={handleRemove}
-      >
+      <span className="text-xs">{character.name}</span>
+      <button className="flex h-full items-center pl-0.5 pr-1">
         <Cross2Icon className="h-3 w-3" />
       </button>
     </span>
+  );
+};
+
+type MultiSelectOptionProps = {
+  character: Character;
+  selected: boolean;
+  addSelected: (id: number) => void;
+  removeSelected: (id: number) => void;
+};
+
+const MultiSelectOption = ({
+  character,
+  selected,
+  addSelected,
+  removeSelected,
+}: MultiSelectOptionProps) => {
+  return (
+    <div
+      className="flex items-center gap-2 border-b p-2 last:border-b-0"
+      role="option"
+      onClick={() =>
+        selected ? removeSelected(character.id) : addSelected(character.id)
+      }
+    >
+      <input
+        type="checkbox"
+        checked={selected}
+        onChange={(e) => e.stopPropagation()}
+      />
+      <img
+        src={character.image}
+        alt={character.name}
+        className="h-9 w-9 rounded-md"
+      />
+      <div className="flex flex-1 flex-col">
+        <span className="text-sm">{character.name}</span>
+        <span className="text-xs text-gray-500">
+          {character.episode.length} Episodes
+        </span>
+      </div>
+    </div>
   );
 };
