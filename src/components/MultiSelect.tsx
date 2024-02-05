@@ -90,8 +90,11 @@ const MultiSelectPill = ({ option, removeSelected }: MultiSelectPillProps) => {
     <span className="inline-flex h-6 items-center rounded-md bg-gray-100 pl-2">
       <span className="text-xs">{option.label}</span>
       <button
-        className="flex h-full items-center pl-0.5 pr-1"
-        onClick={() => removeSelected(option)}
+        className="flex h-full items-center pl-0.5 pr-1 transition-transform active:translate-y-[1px]"
+        onClick={(e) => {
+          e.preventDefault();
+          removeSelected(option);
+        }}
       >
         <Cross2Icon className="h-3 w-3" />
       </button>

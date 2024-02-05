@@ -27,7 +27,7 @@ export const Example = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <div className="w-[350px]">
+      <div className="w-[500px]">
         <label className="mb-2 block text-sm font-medium text-gray-700">
           Pick your favorite characters
         </label>

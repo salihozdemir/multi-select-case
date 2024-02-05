@@ -24,7 +24,7 @@ export const MultiSelectOption = ({
 
   return (
     <div
-      className="flex items-center gap-2 border-b p-2 last:border-b-0"
+      className="flex cursor-pointer items-center gap-2 border-b p-2 transition-colors last:border-b-0 hover:bg-gray-100"
       role="option"
       onClick={onSelect}
     >
