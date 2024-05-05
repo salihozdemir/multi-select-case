@@ -1,5 +1,7 @@
 To start project;
 
+Hollo wrld!
+
 1. Install dependencies:
 
    ```bash
